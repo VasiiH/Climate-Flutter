@@ -9,32 +9,39 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-
-  void getLocation() async{
+  void getLocation() async {
     Location location = Location();
     await location.getCurrentLocation();
     // print(location.latitude);
     // print(location.longitude);
-
   }
 
-  void getData() async{
-    http.Response response = await http.get('https://api.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=0ed13d359f543f1068186b4b6c0c7ad1');
-    if(response.statusCode == 200){
+  void getData() async {
+    http.Response response = await http.get(
+        'https://api.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=0ed13d359f543f1068186b4b6c0c7ad1');
+    if (response.statusCode == 200) {
       String data = response.body;
-      var longitude = jsonDecode(data)['coord']['lon'];
-      print(longitude);
 
-      var weather = jsonDecode(data)['weather'][0]['description'];
+      var decodedData = jsonDecode(data);
+
+      String weather = decodedData['weather'][0]['description'];
       print(weather);
-    }else{
+
+      String city = decodedData['name'];
+      print(city);
+
+      int temperature = decodedData['weather'][0]['id'];
+      print(temperature);
+
+
+    } else {
       print(response.statusCode);
     }
     // print(response.body);
     // print(response.hashCode);
     // print(response.runtimeType);
-
   }
+
   @override
   void initState() {
     getLocation();
@@ -47,7 +54,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
     return Scaffold(
       body: Center(
         child: Text('build called'),
-
       ),
     );
   }
